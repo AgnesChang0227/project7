@@ -39,6 +39,9 @@ userSchema.methods.isStudent = function (){
 userSchema.methods.isInstructor=function (){
     return this.role == "instructor";
 }
+userSchema.methods.isAdmin=function (){
+    return this.role == "admin";
+}
 
 //mongoose schema middleware
 //pre => 在事情發生之前，這裡是save 之前

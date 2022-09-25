@@ -9,7 +9,7 @@ const courseSchema = new mongoose.Schema({
         required: true,
     },
     instructor:{
-        //連結User的Schema資料
+        //ref表示 instructor 通過ObjectID 關聯User
         type:mongoose.Schema.Types.ObjectId,
         ref:"User",
     },
