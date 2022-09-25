@@ -4,7 +4,6 @@ const router = express.Router();
 import jwt from "jsonwebtoken";
 //validation
 import validation from "../validation.js";
-
 const registerValidation = validation.registerValidation;
 const loginValidation = validation.loginValidation;
 //models
@@ -25,7 +24,7 @@ router.get("/testAPI", (req, res) => {
     }
     return res.json(msgObj);//這邊用res.send()也一樣
 })
-//post register
+//post register => validation => find => (hash password)save user
 router.post("/register", async (req, res) => {
     //check the validation of data:
     // console.log(registerValidation(req.body));
@@ -53,7 +52,7 @@ router.post("/register", async (req, res) => {
         res.status(400).send("User not saved.")
     }
 })
-
+//post login => validation => find => token
 router.post("/login", (req, res) => {
     //先 data validation
     const {error} = loginValidation(req.body);
@@ -74,10 +73,10 @@ router.post("/login", (req, res) => {
                 //第一個放object,第二個放secret
                 const token = jwt.sign(tokenObject, process.env.PASSPORT_SECRET);
                 //回傳一個object => success+ token +user
-                res.send({success: true, token: "JWT" + token, user});
+                //這邊記得JWT 空格
+                res.send({success: true, token: "JWT " + token, user});
                 //email:abc@gmail.com password:12345678 token:
                 /*"JWTeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzJmZjg3M2I1MzdhMDRhNDVhMzNiZTIiLCJlbWFpbCI6ImFiY0BnbWFpbC5jb20iLCJpYXQiOjE2NjQwOTAyODd9.3s2ixqkIzy42tPe2nA8ySr_gjAqJkC8hY-aoCf7aeJQ"*/
-
             }
         });
 

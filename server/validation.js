@@ -22,8 +22,21 @@ const loginValidation = (data)=>{
     return schema.validate(data);
 }
 
+//course 的 validation
+export const courseValidation = (data)=>{
+    const schema = Joi.object({
+        title:Joi.string().min(6).max(50).required(),
+        description:Joi.string().min(6).max(50).required(),
+        price:Joi.number().min(10).max(9999).required(),
+    })
+    return schema.validate(data);
+}
+
+
 const validation = {
     registerValidation,
     loginValidation,
+    courseValidation,
 }
 export default validation;
+
