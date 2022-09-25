@@ -67,7 +67,7 @@ router.post("/login", (req, res) => {
 
         //找到則compare password => 使用在schema設置的fn
         user.comparePassword(req.body.password, function (err, isMatch) {
-            if (err) return res.status(401).send("Wrong password");
+            if (err) return res.status(400).send(err);
             if (isMatch) {
                 //make token
                 const tokenObject = {_id: user._id, email: user.email};
@@ -79,6 +79,7 @@ router.post("/login", (req, res) => {
                 //email:abc@gmail.com password:12345678 token:
                 /*"JWTeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzJmZjg3M2I1MzdhMDRhNDVhMzNiZTIiLCJlbWFpbCI6ImFiY0BnbWFpbC5jb20iLCJpYXQiOjE2NjQwOTAyODd9.3s2ixqkIzy42tPe2nA8ySr_gjAqJkC8hY-aoCf7aeJQ"*/
             }
+            res.status(401).send("Wrong Password.")
         });
 
     })
