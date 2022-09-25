@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
     },
     role:{
         type:String,
-        enum:["Student","Instructor"],//只能在裡面選擇
+        enum:["student","instructor"],//只能在裡面選擇
         required:true,
         default:"Student",
     },
@@ -37,7 +37,7 @@ userSchema.methods.isStudent = function (){
 };
 
 userSchema.methods.isInstructor=function (){
-    return this.role == "Instructor";
+    return this.role == "instructor";
 }
 
 //mongoose schema middleware
