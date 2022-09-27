@@ -1,5 +1,6 @@
 //把react的http request 傳送到server
 import axios from "axios";
+import {redirect} from "react-router-dom";
 const API_URL = "http://localhost:8080/api/user";
 
 class AuthService{
@@ -19,7 +20,8 @@ class AuthService{
             role,
         });
     }
-    getCurrentUser(){//讓未登入狀態時看不到logout和其他相關button
+    getCurrentUser(){//獲得現在的user
+        //從token 拿出 user解析為json => object
         return JSON.parse(localStorage.getItem("user"));
     }
 }

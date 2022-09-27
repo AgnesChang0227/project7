@@ -78,8 +78,10 @@ router.post("/login", (req, res) => {
                 res.send({success: true, token: "JWT " + token, user});
                 //email:abc@gmail.com password:12345678 token:
                 /*"JWTeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzJmZjg3M2I1MzdhMDRhNDVhMzNiZTIiLCJlbWFpbCI6ImFiY0BnbWFpbC5jb20iLCJpYXQiOjE2NjQwOTAyODd9.3s2ixqkIzy42tPe2nA8ySr_gjAqJkC8hY-aoCf7aeJQ"*/
+            }else{
+                res.status(401).send("Wrong Password.")
             }
-            res.status(401).send("Wrong Password.")
+
         });
 
     })

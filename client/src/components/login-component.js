@@ -1,12 +1,16 @@
 import React, {useState} from "react";
-import {useNavigate} from "react-router";
+import {useNavigate} from "react-router-dom";
 import AuthService from "../services/auth.service";
 
-const LoginComponent = () => {
+const LoginComponent = (props) => {
+    let {currentUser, setCurrentUser} = props;
+
     const navigate = useNavigate();
+
     let [email, setEmail] = useState("");
     let [password, setPassword] = useState("");
     let [message, setMessage] = useState("");
+
     const handleChangeEmail = (e) => {
         setEmail(e.target.value);
     };
@@ -22,13 +26,14 @@ const LoginComponent = () => {
                     //localStorage可在browser中的 F12-應用程式-本機儲存空間 看到
                     localStorage.setItem("user", JSON.stringify(response.data))
                 }
+                window.alert("Login successfully, you are now redirected to the profile page")
+                setCurrentUser(AuthService.getCurrentUser());
                 navigate("/profile");//重新導向到個人頁面
             })
             .catch(error => {
                 setMessage(error.response.data);
             });
     }
-
     return (
         <div style={{padding: "3rem"}} className="col-md-12">
             <div>

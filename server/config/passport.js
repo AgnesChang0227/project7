@@ -5,7 +5,7 @@ import {
 } from "passport-jwt"
 import User from "../models/User-model.js";
 
-//export 一個fn
+//export 一個fn =>
 export default (passport) => {
     let opts = {};
     //ExtractJwt => 提取Jwt的部分
@@ -15,9 +15,9 @@ export default (passport) => {
     passport.use(
         new JwtStrategy(opts, function (jwt_payload, done) {
             User.findOne({_id: jwt_payload._id}, (err, user) => {
-                if (err) return done(err, false);
-                if (user) return done(null, user);
-                done(null, false);
+                if (err) return done(err, false);//err
+                if (!user) return done(null, false);//沒有這個user
+                done(null, user);
             })
         }))
 }

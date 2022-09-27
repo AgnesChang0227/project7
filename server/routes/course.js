@@ -16,8 +16,9 @@ router.get("/", (req, res) => {
     //populate語法：Query.populate(path,[select],[model],[match],[options])
     Course.find({}).populate("instructor", ["username", "email"])
         .then((course) => {
-        res.send(course);
-    }).catch(()=>{
+            console.log(course);
+            res.send(course);
+        }).catch(() => {
         res.status(500).send("Cannot get course");
     })
 })
@@ -39,7 +40,7 @@ router.post("/", async (req, res) => {
         title,
         description,
         price,
-        instructor:req.user._id,//儲存user id
+        instructor: req.user._id,//儲存user id
     });
     try {
         await newCourse.save();
@@ -50,80 +51,80 @@ router.post("/", async (req, res) => {
 });
 
 //從course 的id 找到 instructor 的id 和email
-router.get("/:_id",(req,res)=>{
-    let {_id}=req.params;
-    Course.findOne({_id}).populate("instructor",["email"])
-        .then((course)=>{
+router.get("/:_id", (req, res) => {
+    let {_id} = req.params;
+    Course.findOne({_id}).populate("instructor", ["email"])
+        .then((course) => {
             res.send(course);
-        }).catch((err)=>{
-            res.send(err);
+        }).catch((err) => {
+        res.send(err);
     })
 })
 
 //修改course內容
-router.patch("/:_id",async (req,res)=>{
+router.patch("/:_id", async (req, res) => {
     //先 data validation
-    const {error}=courseValidation(req.body);
-    if (error)return res.status(400).send(error.details[0].message);
+    const {error} = courseValidation(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
-    let {_id}=req.params;
+    let {_id} = req.params;
     let course = await Course.findOne({_id});
-    if (!course){
+    if (!course) {
         res.status(404);
         return res.json({
-            success:false,
-            message:"Course not found",
+            success: false,
+            message: "Course not found",
         })
     }
     //如果user是course的作者，或是管理員
-    if (course.instructor.equals(req.user._id)||req.user.isAdmin()){
-        Course.updateOne(course,req.body,{
-            new:true,
-            runValidators:true,
-        }).then(()=>{
+    if (course.instructor.equals(req.user._id) || req.user.isAdmin()) {
+        Course.updateOne(course, req.body, {
+            new: true,
+            runValidators: true,
+        }).then(() => {
             res.send("Course updated")
-        }).catch(err=>{
+        }).catch(err => {
             res.send({
-                success:false,
-                message:err,
+                success: false,
+                message: err,
             })
         })
-    }else {
+    } else {
         res.status(403);
         return res.json({
-            success:false,
-            message:"Only the instructor of this course or admin can edit this course ",
+            success: false,
+            message: "Only the instructor of this course or admin can edit this course ",
         })
     }
 });
 
 //刪除course
-router.delete("/:_id",async (req,res)=>{
-    let {_id}=req.params;
+router.delete("/:_id", async (req, res) => {
+    let {_id} = req.params;
     let course = await Course.findOne({_id});
-    if (!course){
+    if (!course) {
         res.status(404);
         return res.json({
-            success:false,
-            message:"Course not found",
+            success: false,
+            message: "Course not found",
         })
     }
     //如果user是course的作者，或是管理員
-    if (course.instructor.equals(req.user._id)||req.user.isAdmin()){
+    if (course.instructor.equals(req.user._id) || req.user.isAdmin()) {
         Course.deleteOne(course)
-            .then(()=>{
-            res.send("Course deleted")
-        }).catch(err=>{
+            .then(() => {
+                res.send("Course deleted")
+            }).catch(err => {
             res.send({
-                success:false,
-                message:err,
+                success: false,
+                message: err,
             })
         })
-    }else {
+    } else {
         res.status(403);
         return res.json({
-            success:false,
-            message:"Only the instructor of this course or admin can delete this course ",
+            success: false,
+            message: "Only the instructor of this course or admin can delete this course ",
         })
     }
 })
