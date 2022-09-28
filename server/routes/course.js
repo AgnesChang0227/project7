@@ -129,16 +129,59 @@ router.delete("/:_id", async (req, res) => {
     }
 })
 
+//instructor get courses
 router.get("/instructor/:_instructor_id",(req,res)=>{
     let {_instructor_id}=req.params;
     Course.find({instructor: _instructor_id})
         .populate("instructor",["username","email"])
         .then((data)=>{
             // console.log(data);//debug用
-            res.send(data);
+            res.status(200).send(data);
         }).catch(()=>{
             res.status(500).send("Cannot get course data");
     })
+})
+//student get courses
+router.get("/student/:_student_id",(req,res)=>{
+    let {_student_id} = req.params;
+    Course.find({students: _student_id})
+        .populate("instructor",["username","email"])
+        .then((courses)=>{
+            res.status(200).send(courses);
+        }).catch(()=>{
+        res.status(500).send("Cannot get data");
+    })
+})
+
+//search courses
+router.get("/searchCourse/:name",(req,res)=>{
+    let name = req.params;
+    // console.log(name.name);//debug用
+    //$regex:正則表達式，$option:"$i" => 不分大小寫
+    Course.find({title:{$regex:name.name,$options:"$i"}})//有name這個字的
+        .populate("instructor",["username",""])
+        .then(courses=>{
+            // console.log(courses);//debug用
+            res.status(200).send(courses);
+        })
+        .catch(()=>{
+            res.status(500).send("Cannot get data");
+        })
+})
+//enroll course
+router.post("/enroll/:_id",async (req,res)=>{
+    let {_id}=req.params;
+    console.log(req.body);
+    let {user_id} = req.body;
+    try{
+        let course = await Course.findOne({_id});
+        course.students.push(user_id);
+        await course.save();
+        res.status(200).send("Done Enrollment");
+    }catch (err){
+        console.log(err);
+        res.status(400).send(err.message);
+    }
 })
 
 export default router;

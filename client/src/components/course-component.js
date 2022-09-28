@@ -12,15 +12,26 @@ const CourseComponent = (props) => {
     let [courseData, setCourseData] = useState(null);
     useEffect(() => {
         // console.log("Using effect");//debug用
-        let _id = currentUser?(currentUser.user._id):"";
-        CourseService.get(_id)
-            .then(data => {
-                // console.log(data);//debug用
-                setCourseData(data.data);
-            })
-            .catch(err => {
-                console.log(err);
-            })
+        let _id = currentUser ? (currentUser.user._id) : "";
+        if (currentUser.user.role === "instructor") {
+            CourseService.get(_id)
+                .then(data => {
+                    // console.log(data);//debug用
+                    setCourseData(data.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }else if (currentUser.user.role==="student"){
+           CourseService.getEnrolledCourses(_id)
+               .then(data=>{
+                   // console.log(data);
+                   setCourseData(data.data)
+               })
+               .catch(err => {
+                   console.log(err);
+               })
+        }
     }, []);//用於取得data並替代
 
     return (
@@ -40,11 +51,16 @@ const CourseComponent = (props) => {
                     <h1>Welcome to Instructor's Course page</h1>
                 </div>
             )}
-            {currentUser&&courseData&&courseData.length!=0&&(
+            {currentUser && currentUser.user.role === "student" && (
+                <div>
+                    <h1>Welcome to Student's Course page</h1>
+                </div>
+            )}
+            {currentUser && courseData && courseData.length > 0 && (
                 <div>
                     <p>Here's the data we got back from server:</p>
-                    {courseData.map((course)=>(//注意這邊是小括號
-                        <div className="card" style={{width:"18rem"}}>
+                    {courseData.map((course) => (//注意這邊是小括號
+                        <div key={course._id} className="card" style={{width: "18rem"}}>
                             <div className="card-body">
                                 <h5 className="card-title">{course.title}</h5>
                                 <p className="card-text">{course.description}</p>
@@ -56,11 +72,6 @@ const CourseComponent = (props) => {
                 </div>
             )}
 
-            {currentUser && currentUser.user.role === "student" && (
-                <div>
-                    <h1>Welcome to Student's Course page</h1>
-                </div>
-            )}
         </div>
     )
 }
