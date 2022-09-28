@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Routes,Route} from "react-router-dom";
 //import component
 import HomeComponent from "./components/home-component";
@@ -6,6 +6,8 @@ import NavComponent from "./components/nav-component";
 import RegisterComponent from "./components/register-component";
 import LoginComponent from "./components/login-component";
 import ProfileComponent from "./components/profile-component";
+import CourseComponent from "./components/course-component";
+
 import AuthService from "./services/auth.service";
 
 const App=()=>{
@@ -21,6 +23,8 @@ const App=()=>{
                     <LoginComponent currentUser={currentUser} setCurrentUser={setCurrentUser}/>}/>
                 <Route path="/profile"  element={//profile要看current user
                     <ProfileComponent currentUser={currentUser} setCurrentUser={setCurrentUser}/>}/>
+                <Route path="/course"  element={
+                    <CourseComponent currentUser={currentUser} setCurrentUser={setCurrentUser}/>}/>
             </Routes>
         </div>
     );
