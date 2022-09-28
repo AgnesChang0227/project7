@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {Link} from "react-router-dom";
 import AuthService from "../services/auth.service";
 
@@ -56,6 +56,15 @@ const NavComponent = (props) => {
                                                 Course
                                             </Link>
                                         </li>
+                                        {currentUser.user.role === "instructor" && (
+                                            <>
+                                                <li className="nav-item">
+                                                    <Link className="nav-link" to="/postCourse">
+                                                        PostCourse
+                                                    </Link>
+                                                </li>
+                                            </>
+                                        )}
                                     </>
                                 }
                             </ul>

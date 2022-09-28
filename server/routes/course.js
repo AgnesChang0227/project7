@@ -129,5 +129,17 @@ router.delete("/:_id", async (req, res) => {
     }
 })
 
+router.get("/instructor/:_instructor_id",(req,res)=>{
+    let {_instructor_id}=req.params;
+    Course.find({instructor: _instructor_id})
+        .populate("instructor",["username","email"])
+        .then((data)=>{
+            // console.log(data);//debug用
+            res.send(data);
+        }).catch(()=>{
+            res.status(500).send("Cannot get course data");
+    })
+})
+
 export default router;
 

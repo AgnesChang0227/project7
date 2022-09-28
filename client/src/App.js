@@ -7,6 +7,7 @@ import RegisterComponent from "./components/register-component";
 import LoginComponent from "./components/login-component";
 import ProfileComponent from "./components/profile-component";
 import CourseComponent from "./components/course-component";
+import PostCourseComponent from "./components/postCourse-component";
 
 import AuthService from "./services/auth.service";
 
@@ -25,6 +26,8 @@ const App=()=>{
                     <ProfileComponent currentUser={currentUser} setCurrentUser={setCurrentUser}/>}/>
                 <Route path="/course"  element={
                     <CourseComponent currentUser={currentUser} setCurrentUser={setCurrentUser}/>}/>
+                <Route path="/postCourse"  element={
+                    <PostCourseComponent currentUser={currentUser} setCurrentUser={setCurrentUser}/>}/>
             </Routes>
         </div>
     );
